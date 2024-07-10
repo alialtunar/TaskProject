@@ -1,0 +1,114 @@
+﻿@{
+    var categories = new List<string> { "All", "Electronics", "Books", "Clothing", "Toys", };
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - TaskProject.WebUI</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <!-- you can add css or other files -->
+    <link rel="stylesheet" href="~/TaskProject.WebUI.styles.css" asp-append-version="true" />
+    <style>
+        /*style for header,navbar and image size */
+        .header {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .header-title {
+            margin: 0;
+            font-size: 2rem;
+        }
+
+        .sidebar {
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-right: 1px solid #dee2e6;
+            height: 100vh;
+        }
+
+            .sidebar h2 {
+                margin-top: 0;
+            }
+
+        .fixed-img-size {
+            width: 100%;
+            height: 250px;
+            object-fit: fit;
+        }
+    </style>
+
+</head>
+<body style="">
+    
+    <div class="">
+        <main role="main" >
+            <div class="row">
+                <div class="col-12">
+                    <header class="header bg-light text-dark p-4">
+                        <div>
+                            <h1 class="header-title">Product Listing Application</h1>
+                        </div>
+                    </header>
+                </div>
+            </div>
+
+            <div class="row">
+            <div class="col-md-3 bg-light">
+                <div class="sidebar p-5">
+                    <h2>Filters</h2>
+                    <form asp-controller="Home" asp-action="Index" method="post">
+                        <div class="form-group">
+                            <label for="categoryName">Category Name:</label>
+
+                            <select id="categoryName" name="CategoryName" class="form-control">
+                                    <!-- Dropdown options for categories -->
+                                @foreach (var category in categories)
+                                {
+                                    <option value="@category">@category</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="searchTerm">Search Term:</label>
+                            <input type="text" id="searchTerm" name="SearchTerm" class="form-control" value="@Model.searchTerm" />
+                        </div>
+                        <div class="form-group">
+                            <label for="minPrice">Min Price:</label>
+                            <input type="number" id="minPrice" name="MinPrice" class="form-control" value="@Model.minPrice?.ToString() ?? " "" />
+                        </div>
+                        <div class="form-group">
+                            <label for="maxPrice">Max Price:</label>
+                            <input type="number" id="maxPrice" name="MaxPrice" class="form-control" value="@Model.maxPrice?.ToString() ?? " " " />
+                        </div>
+                        <button type="submit" class="btn btn-primary m-2">Filter</button>
+                    </form>
+                </div>
+            </div>
+                <div class="col-md-9 p-5">
+                    <!-- Area that listing product -->
+            @RenderBody()
+            </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Default filters are assigned when the page is loaded
+        window.onload = function () {
+            document.getElementById("categoryName").value = "All";
+            document.getElementById("minPrice").value = null;
+            document.getElementById("maxPrice").value = null;
+            document.getElementById("searchTerm").value = "";
+        }
+    </script>
+    <!-- Required JavaScript libraries -->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
